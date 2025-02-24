@@ -38,11 +38,15 @@ export interface FieldPatterns {
     phone: [
       'phone',
       'phone number',
+      'phone_number',
+      'phonenumber',
       'telephone',
       'mobile',
       'contact number',
       'cell',
-      'mobile number'
+      'mobile number',
+      'mobile_number',
+      'mobilenumber'
     ],
     address: [
       'address',

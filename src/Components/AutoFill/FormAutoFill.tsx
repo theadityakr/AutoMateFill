@@ -108,7 +108,7 @@ return (
       icon = {<Search />}
       iconPosition='left'
       radius='full'
-      size='md'
+      size='sm'
       variant='solid'
       color='primary'
     >

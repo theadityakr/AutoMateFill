@@ -30,7 +30,7 @@ const AddProfile: React.FC<AddProfileProps> = ({ onAdd }) => {
 
   return (
     <>
-      <Button color="primary" onClick={() => setIsOpen(true)} radius="full" size="lg" variant="bordered">
+      <Button color="primary" onClick={() => setIsOpen(true)} radius="full" size="md" variant="bordered">
         Add Profile
       </Button>
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
@@ -48,6 +48,7 @@ const AddProfile: React.FC<AddProfileProps> = ({ onAdd }) => {
             size="md"
             variant="flat"
             isRequired
+            fullWidth
             onChange={(value: string) => setProfileName(value)}
             />
                 <input className="hide"

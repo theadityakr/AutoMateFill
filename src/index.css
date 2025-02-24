@@ -1,4 +1,18 @@
 @import url("@shivangi_2408/effective-ui/dist/esm/styles.css") layer(effective-ui);
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+.input-box__container{
+  width: 100%
+}
+html, body {
+  font-size: 12px; 
+}* {
+  font-size: inherit;
+  font-family: "Be Vietnam Pro", serif;
+  font-weight: 300;
+  font-style: normal;
+  font-size: 14px;
+}
 
 ::-webkit-scrollbar {
   display: none;
@@ -52,6 +66,12 @@ body{
   padding: 0;
   overflow: -moz-hidden-unscrollable;
   overflow: hidden;
-  height: 100vh;
-  width: 100vw;
+  max-height: 100vh;
+  max-width: 100vw;
+  min-width: 41.667rem;
+  min-height: 50rem;
+}
+
+h2{
+  font-size: 1.5rem;
 }

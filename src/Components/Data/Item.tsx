@@ -13,10 +13,10 @@ const Item: React.FC<ItemProps> = ({ label, cmd, value, onClick }) => {
   return (
     <div className="item flex-row" onClick={onClick}>
       <div className="item-type flex-row">
-        <Chip color="default" size="md" variant="flat">
+        <Chip color="default" size="sm" variant="flat">
           {label}
         </Chip>
-        <Chip color="primary" size="md" variant="faded">
+        <Chip color="primary" size="sm" variant="faded">
           {cmd}
         </Chip>
       </div>

@@ -25,7 +25,6 @@
   width: 100%;
   padding: 0.5em 0.75em 0.5em 0.75em;
   position: sticky;
-  z-index: 10;
   justify-content: center;
 }
 .data {
@@ -103,7 +102,8 @@
   background-color: var(--effectiveui-default-50);
   padding: 0.5em;
   border-radius: 16px;
-  width: 50%
+  width: 50%;
+  gap: 1em;
 }
 
 .popup {
@@ -146,7 +146,7 @@
   width: 100%;
   padding: 0.5em 0.375em;
   justify-content: flex-start;
-  gap: 1em;
+  gap: 2em;
 }
 
 .modal_footer{
