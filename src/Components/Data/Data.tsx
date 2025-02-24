@@ -1,11 +1,11 @@
-"use client"
-
 import type React from "react"
 import { useState, useEffect } from "react"
+import { Button } from "@shivangi_2408/effective-ui"
+
 import Item from "./Item"
 import EditItemPopup from "./EditItemPopup"
 import useLocalStorage from "../../Hooks/useLocalStorage"
-import { Button } from "@shivangi_2408/effective-ui"
+
 
 const LOCAL_STORAGE_KEY_SELECTED_PROFILE = "selected_profile"
 

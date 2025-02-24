@@ -87,6 +87,7 @@
 }
 
 .overlay {
+  z-index: 99;
   position: fixed;
   top: 0;
   left: 0;
@@ -132,6 +133,40 @@
   padding: 0.5em 0.375em;
   justify-content: space-around;
   
+}
+
+.modal_container{
+ gap: 1em;
+}
+
+.modal_header{
+
+}
+.modal_body{
+  width: 100%;
+  padding: 0.5em 0.375em;
+  justify-content: flex-start;
+  gap: 1em;
+}
+
+.modal_footer{
+ justify-content: space-around;
+ width: 100%;
+}
+
+.file-input{
+  width: 100%;
+  gap: 1em;
+  justify-content: flex-start;
+}
+
+.hide{
+  display: none;
+}
+
+.file-input-choose {
+  justify-content: space-around;
+  width: 100%;
 }
 /* 
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
