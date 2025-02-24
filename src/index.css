@@ -1,0 +1,57 @@
+@import url("@shivangi_2408/effective-ui/dist/esm/styles.css") layer(effective-ui);
+
+::-webkit-scrollbar {
+  display: none;
+  width: 0.5em;
+  height: 0.5em;
+  background: transparent;
+}
+
+::-webkit-scrollbar-track {
+  display: none;
+  border-radius: 99999px;
+  margin-block: 1em;
+}
+
+::-webkit-scrollbar-thumb {
+  background:var(--effectiveui-default-100);
+  border-radius: 99999px;
+  min-height: 5px !important; 
+  height: 5px !important;  
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--effectiveui-default-50);
+}
+
+@supports (scrollbar=color: red blue) {
+  *{
+    scrollbar-width: none;
+  }
+}
+
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+body{
+  background-color: var(--effectiveui-background);
+  color: var(--effectiveui-foreground);
+  margin: 0;
+  padding: 0;
+  overflow: -moz-hidden-unscrollable;
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+}
