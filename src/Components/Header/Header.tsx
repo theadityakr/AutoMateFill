@@ -40,7 +40,7 @@ const Header = () => {
     try {
       const extractedData = await extractDataFromPDF(resumeFile)
       const newProfileData = [
-        ...ProfileSampleData,
+        // ...ProfileSampleData,
         ...extractedData,
       ]
 

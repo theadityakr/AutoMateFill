@@ -1,6 +1,6 @@
-// src/Utils/PdfUtils.tsx
-
 import * as pdfjsLib from "pdfjs-dist";
+import { OpenAI } from 'openai';
+
 import { ProfileItem } from "../Components/Data/Data";
 import { ProfileSampleData } from "../Components/Data/ProfileSampleData"
 
@@ -9,6 +9,80 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
   'pdfjs-dist/build/pdf.worker.min.js',
   import.meta.url
 ).toString();
+
+const processWithAI = async (text: string): Promise<ProfileItem[]> => {
+  try {
+    const openai = new OpenAI({
+      apiKey: '', 
+      dangerouslyAllowBrowser: true 
+    });
+
+    const prompt = `
+      Extract the following information from this resume and format it as a JSON array of objects with label, cmd, and value properties:
+      - fullName (cmd: --n)
+      - firstName (cmd: --fn)
+      - lastName (cmd: --ln)
+      - email (cmd: --e)
+      - phone (cmd: --ph)
+      - address (cmd: --addr)
+      - address2 (cmd: --addr2)
+      - city (cmd: --city)
+      - state (cmd: --st)
+      - country (cmd: --ctry)
+      - postCode (cmd: --zip)
+      - title (cmd: --title)
+      - experience (cmd: --exp)
+      - currentCompany (cmd: --comp)
+      - linkedin (cmd: --li)
+      - portfolio (cmd: --port)
+      - degree (cmd: --deg)
+      - major (cmd: --maj)
+      - university (cmd: --uni)
+      - graduationYear (cmd: --grad)
+      - gpa (cmd: --gpa)
+      - primarySkills (cmd: --skills)
+      - languages (cmd: --lang)
+      - frameworks (cmd: --fw)
+      - databases (cmd: --db)
+      - tools (cmd: --tools)
+      - salary (cmd: --sal)
+      - availability (cmd: --avail)
+      - visaStatus (cmd: --visa)
+      - referral (cmd: --ref)
+      - coverLetter (cmd: --cover)
+      - summary (cmd: --sum)
+
+      Resume text:
+      ${text}
+
+      Return only the JSON array without any explanation.
+    `;
+
+    const response = await openai.chat.completions.create({
+      model: 'gpt-4o', // Or your preferred model
+      messages: [
+        { role: 'system', content: 'You extract structured information from resumes.' },
+        { role: 'user', content: prompt }
+      ],
+      temperature: 0.7,
+    });
+
+    const content = response.choices[0]?.message?.content || '';
+    
+    // Extract JSON from the response
+    const jsonMatch = content.match(/\[[\s\S]*\]/);
+    if (!jsonMatch) {
+      throw new Error('Failed to extract JSON from AI response');
+    }
+
+    const profileData: ProfileItem[] = JSON.parse(jsonMatch[0]);
+    return profileData;
+  } catch (err) {
+    console.error('Error processing with AI:', err);
+    throw new Error('Failed to process resume with AI');
+  }
+};
+
 
 
 export async function extractDataFromPDF(file: File): Promise<ProfileItem[]> {
@@ -27,55 +101,11 @@ export async function extractDataFromPDF(file: File): Promise<ProfileItem[]> {
       fullText += pageText + " ";
     }
 
-    // Create a copy of the sample data structure
-    const extractedData: ProfileItem[] = [...ProfileSampleData];
-    // Extract and update values based on patterns
-    const patterns = {
-      fullName: /([A-Z][a-z]+ [A-Z][a-z]+)/,
-      email: /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/,
-      phone: /(?:\+\d{1,2}\s?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}/,
-      address: /(\d+\s+[\w\s]+(?:Street|Road|Ave|Avenue|Blvd|Boulevard|Ln|Lane))/i,
-      city: /(?:in|at)\s+([A-Z][a-zA-Z\s]+)(?:,|\s+)/,
-      state: /([A-Z]{2}|[A-Z][a-z]+)\s+\d{5}/,
-      postCode: /\b\d{5}(?:-\d{4})?\b/,
-      title: /(?:position|title|role):\s*([^,.\n]+)/i,
-      currentCompany: /(?:at|with)\s+([A-Z][A-Za-z\s&]+)(?:,|\s+)/,
-      experience: /(\d+)\+?\s*(?:years?|yrs?)(?:\s+of\s+experience)?/i,
-      degree: /(?:Bachelor|Master|PhD|BSc|MSc|MBA|MD|BS|MS|BA|MA)[^\n]*/i,
-      university: /(?:from|at)\s+([A-Z][A-Za-z\s&]+University)/,
-      graduationYear: /(?:graduated|completion|class of|batch)\s*(?:of|in)?\s*(\d{4})/i,
-      gpa: /GPA:?\s*([0-4]\.\d{1,2})/i,
-      primarySkills: /(?:skills|expertise|proficient in):\s*([^.]+)/i,
-      languages: /(?:programming languages|languages):\s*([^.]+)/i,
-      frameworks: /(?:frameworks|technologies):\s*([^.]+)/i,
-      databases: /(?:databases|db):\s*([^.]+)/i
-    };
-
-    // Update extracted values in the data structure
-    for (const item of extractedData) {
-      const pattern = patterns[item.label as keyof typeof patterns];
-      if (pattern) {
-        const match = fullText.match(pattern);
-        if (match) {
-          item.value = match[1] || match[0];
-        }
-      }
-    }
-
-    // Special handling for name parts
-    const nameMatch = fullText.match(patterns.fullName);
-    if (nameMatch) {
-      const [firstName, lastName] = nameMatch[1].split(" ");
-      extractedData.find(item => item.label === "firstName")!.value = firstName;
-      extractedData.find(item => item.label === "lastName")!.value = lastName;
-    }
-
-    return extractedData;
+    const data = await processWithAI(fullText);
+    return data;
 
   } catch (error: any) {
     console.error("Error processing PDF:", error);
     throw new Error(`Failed to process PDF file: ${error.message}`);
   }
 }
-
-// No need for mergeWithSampleData anymore since we're returning the correct format directly
