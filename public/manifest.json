@@ -5,6 +5,12 @@
   "description": "Auto-fill forms with saved data and AI-generated responses.",
   "permissions": ["storage", "activeTab", "scripting"],
   "host_permissions": ["<all_urls>"],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["contentScript.js"]
+    }
+  ],
   "action": {
     "default_popup": "index.html",
     "default_icon": {
