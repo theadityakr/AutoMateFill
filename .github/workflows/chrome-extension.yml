@@ -1,0 +1,59 @@
+name: Build and Deploy Chrome Extension
+
+on:
+  push:
+    branches:
+      - main  # Change this to your default branch
+
+jobs:
+  build:
+    name: Build Extension
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install Dependencies
+        run: npm install  # or yarn install
+
+      - name: Build Project
+        run: npm run build  # or yarn build
+
+      - name: Create ZIP Archive
+        run: zip -r chrome-extension.zip ./build
+
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: chrome-extension
+          path: chrome-extension.zip
+
+  deploy:
+    name: Publish to Chrome Web Store
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Download Built Extension
+        uses: actions/download-artifact@v4
+        with:
+          name: chrome-extension
+          path: .
+
+      - name: Install Google Chrome Web Store CLI
+        run: npm install -g chrome-webstore-upload-cli
+
+      - name: Upload Extension to Chrome Web Store
+        run: |
+          chrome-webstore-upload upload --extension-id ${{ secrets.CHROME_EXTENSION_ID }} \
+                                       --client-id ${{ secrets.CHROME_CLIENT_ID }} \
+                                       --client-secret ${{ secrets.CHROME_CLIENT_SECRET }} \
+                                       --refresh-token ${{ secrets.CHROME_REFRESH_TOKEN }} \
+                                       --zip-file chrome-extension.zip
+          
+      - name: Publish Extension
+        run: |
+          chrome-webstore-upload publish --extension-id ${{ secrets.CHROME_EXTENSION_ID }} \
+                                         --client-id ${{ secrets.CHROME_CLIENT_ID }} \
+                                         --client-secret ${{ secrets.CHROME_CLIENT_SECRET }} \
+                                         --refresh-token ${{ secrets.CHROME_REFRESH_TOKEN }}

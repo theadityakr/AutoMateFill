@@ -1,11 +1,11 @@
-"use client"
-
 import type React from "react"
 import { useState, useEffect } from "react"
+import { Button } from "@shivangi_2408/effective-ui"
+
 import Item from "./Item"
 import EditItemPopup from "./EditItemPopup"
 import useLocalStorage from "../../Hooks/useLocalStorage"
-import { Button } from "@shivangi_2408/effective-ui"
+
 
 const LOCAL_STORAGE_KEY_SELECTED_PROFILE = "selected_profile"
 
@@ -81,9 +81,9 @@ const Data: React.FC = () => {
   return (
     <>
     <div className="data-modifications flex-row">
-    <Button size="md" radius="full" color="success" variant="bordered" onClick={handleNewItem}> Add Item</Button>
-    <Button size="md" radius="full" color="warning" variant="bordered" onClick={handleNewItem}> Update Item</Button>
-    <Button size="md" radius="full" color="danger" variant="bordered" onClick={handleNewItem}> Delete Item</Button>
+    <Button size="sm" radius="full" color="success" variant="bordered" onClick={handleNewItem}> Add Item</Button>
+    <Button size="sm" radius="full" color="warning" variant="bordered" onClick={handleNewItem}> Update Item</Button>
+    <Button size="sm" radius="full" color="danger" variant="bordered" onClick={handleNewItem}> Delete Item</Button>
     </div>
       <div className="data flex-column">  
           {profileData.map((item) => (

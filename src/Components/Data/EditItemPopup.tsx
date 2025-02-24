@@ -28,15 +28,15 @@ const EditItemPopup: React.FC<EditItemPopupProps> = ({ item, onUpdate, onClose }
         <h2>Edit Item</h2>
         <form className="flex-column"onSubmit={handleSubmit}>
           <div className="item-type-edit flex-row">
-            <Chip color="default" size="md" variant="flat">Label</Chip>
+            <Chip color="default" size="sm" variant="flat">Label</Chip>
             <input id="label" name="label" value={editedItem.label} onChange={handleInputChange} required />
           </div>
           <div className="item-type-edit flex-row">
-            <Chip color="default" size="md" variant="flat">Command</Chip>
+            <Chip color="default" size="sm" variant="flat">Command</Chip>
             <input id="cmd" name="cmd" value={editedItem.cmd} onChange={handleInputChange} required />
           </div>
           <div className="item-type-edit flex-row">
-            <Chip color="default" size="md" variant="flat">Value</Chip>
+            <Chip color="default" size="sm" variant="flat">Value</Chip>
             <input id="value" name="value" value={editedItem.value} onChange={handleInputChange} required />
           </div>
           <div className="item-type-option flex-row">
