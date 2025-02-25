@@ -3,7 +3,6 @@ import { v4 as uuidv4 } from "uuid";
 
 import Profiles from "./Profiles";
 import AddProfile from "./AddProfile";
-import { ProfileSampleData } from "../Data/ProfileSampleData";
 import { extractDataFromPDF } from "../../Utils/PdfUtils";
 
 
@@ -11,6 +10,7 @@ const LOCAL_STORAGE_KEY_PROFILES = "profiles";
 const LOCAL_STORAGE_KEY_SELECTED_PROFILE = "selected_profile";
 
 const Header = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const [profileList, setProfileList] = useState(() => {
     const storedProfiles = localStorage.getItem(LOCAL_STORAGE_KEY_PROFILES);
     return storedProfiles
@@ -20,6 +20,7 @@ const Header = () => {
 
   const [selectedProfile, setSelectedProfile] = useState(() =>{
       const storedSelectedProfile = localStorage.getItem(LOCAL_STORAGE_KEY_SELECTED_PROFILE);
+      console.log(storedSelectedProfile);
       return storedSelectedProfile ? JSON.parse(storedSelectedProfile) : profileList[0]
   });
 
@@ -35,10 +36,11 @@ const Header = () => {
   }, [profileList, profileData, selectedProfile]);
 
   const addProfile = async (profileName: string, resumeFile: File) => {
-    const newProfile = { content: uuidv4(), label: profileName }
-
+    setIsLoading(true);
+    
     try {
-      const extractedData = await extractDataFromPDF(resumeFile)
+      const newProfile = { content: uuidv4(), label: profileName };
+      const extractedData = await extractDataFromPDF(resumeFile);
       const newProfileData = [
         // ...ProfileSampleData,
         ...extractedData,
@@ -55,11 +57,19 @@ const Header = () => {
     } catch (error) {
       console.error("Error extracting data from PDF:", error)
       alert("Failed to extract data from the resume. Please try again.")
+    } finally {
+      setIsLoading(false);
     }
   }
 
   return (
     <div className="header flex-row">
+      {isLoading && (
+        <div className="loading-overlay">
+          <div className="loading-spinner"></div>
+          <p>Processing resume, please wait...</p>
+        </div>
+      )}
       <Profiles profileList={profileList} onSelect={setSelectedProfile} />
       <AddProfile onAdd={addProfile} />
     </div>
