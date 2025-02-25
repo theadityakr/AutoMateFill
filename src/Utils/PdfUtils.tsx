@@ -14,7 +14,7 @@ async function fetchResumeData(resumeText: string, links: { text: string; url: s
 
   const apiUrl = "https://intuitai-openai.openai.azure.com/openai/deployments/a4i-chatbot4.1/chat/completions?api-version=2024-08-01-preview";
 
-  const apiKey = "caf8652b9bc442e7871f5b10375da332"; 
+  const apiKey = ""; 
   const payload = {
     messages: [
       {
