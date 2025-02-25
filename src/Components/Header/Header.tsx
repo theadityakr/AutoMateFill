@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 import Profiles from "./Profiles";
 import AddProfile from "./AddProfile";
 import { extractDataFromPDF } from "../../Utils/PdfUtils";
+import { ProfileItem } from "../Data/Data";
 
 
 const LOCAL_STORAGE_KEY_PROFILES = "profiles";
@@ -12,7 +13,7 @@ const LOCAL_STORAGE_KEY_SELECTED_PROFILE = "selected_profile";
 const Header = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [profileList, setProfileList] = useState(() => {
-    const storedProfiles = localStorage.getItem(LOCAL_STORAGE_KEY_PROFILES);
+  const storedProfiles = localStorage.getItem(LOCAL_STORAGE_KEY_PROFILES);
     return storedProfiles
         ? JSON.parse(storedProfiles)
         : [{ content: uuidv4(), label: "Sample" }];
@@ -20,24 +21,16 @@ const Header = () => {
 
   const [selectedProfile, setSelectedProfile] = useState(() =>{
       const storedSelectedProfile = localStorage.getItem(LOCAL_STORAGE_KEY_SELECTED_PROFILE);
-      console.log(storedSelectedProfile);
       return storedSelectedProfile ? JSON.parse(storedSelectedProfile) : profileList[0]
-  });
-
-  const [profileData, setProfileData] = useState(() => {
-      const storedData = localStorage.getItem(selectedProfile?.content);
-      return storedData ? JSON.parse(storedData) : {};
   });
 
   useEffect(() => {
     localStorage.setItem(LOCAL_STORAGE_KEY_PROFILES, JSON.stringify(profileList));
-    localStorage.setItem(selectedProfile?.content, JSON.stringify(profileData));
     localStorage.setItem(LOCAL_STORAGE_KEY_SELECTED_PROFILE,JSON.stringify(selectedProfile));
-  }, [profileList, profileData, selectedProfile]);
+  }, [profileList,selectedProfile]);
 
   const addProfile = async (profileName: string, resumeFile: File) => {
     setIsLoading(true);
-    
     try {
       const newProfile = { content: uuidv4(), label: profileName };
       const extractedData = await extractDataFromPDF(resumeFile);
@@ -51,9 +44,12 @@ const Header = () => {
         return [...updatedProfiles, newProfile]
       })
 
-      setProfileData(newProfileData);
+      
+      localStorage.setItem(newProfile?.content, JSON.stringify(newProfileData));
+
       setSelectedProfile(newProfile);
       window.location.reload();
+      
     } catch (error) {
       console.error("Error extracting data from PDF:", error)
       alert("Failed to extract data from the resume. Please try again.")
@@ -62,6 +58,10 @@ const Header = () => {
     }
   }
 
+  const handleProfileChange = (profile: ProfileItem) => {
+    setSelectedProfile(profile);
+    window.location.reload();
+  } 
   return (
     <div className="header flex-row">
       {isLoading && (
@@ -70,7 +70,7 @@ const Header = () => {
           <p>Processing resume, please wait...</p>
         </div>
       )}
-      <Profiles profileList={profileList} onSelect={setSelectedProfile} />
+      <Profiles selectedProfile = {selectedProfile} profileList={profileList} onSelect={handleProfileChange} />
       <AddProfile onAdd={addProfile} />
     </div>
   )

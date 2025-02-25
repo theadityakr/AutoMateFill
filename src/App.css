@@ -176,7 +176,8 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: linear-gradient(rgba(0, 0, 255, 0.5), rgba(0, 0, 255, 0.5)), var(--effectiveui-background);
+  backdrop-filter: blur(5px);
   display: flex;
   flex-direction: column;
   justify-content: center;

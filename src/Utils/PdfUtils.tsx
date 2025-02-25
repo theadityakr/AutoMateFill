@@ -14,7 +14,7 @@ async function fetchResumeData(resumeText: string, links: { text: string; url: s
 
   const apiUrl = "https://intuitai-openai.openai.azure.com/openai/deployments/a4i-chatbot4.1/chat/completions?api-version=2024-08-01-preview";
 
-  const apiKey = ""; 
+  const apiKey = "caf8652b9bc442e7871f5b10375da332"; 
   const payload = {
     messages: [
       {
@@ -74,7 +74,7 @@ async function fetchResumeData(resumeText: string, links: { text: string; url: s
         - previousTechStack.3 (cmd: --ptech3)
         - currentSalary (cmd: --csal)
         - ExpectedSalary (cmd: --esal)
-        - projectsList
+        - projectsList (cmd: --projl)
         - project1Name (cmd: --proj1n)
         - project1ghUrl (cmd: --proj1-gh)
         - project1DemoUrl (cmd: --proj1-demo)
