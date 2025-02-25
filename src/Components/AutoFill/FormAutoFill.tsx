@@ -1,22 +1,32 @@
 import React, { useEffect, useState } from 'react';
 import { Button } from '@shivangi_2408/effective-ui';
 import { Search } from 'lucide-react';
+import { v4 as uuidv4 } from "uuid";
 
 import { fieldPatterns } from './ProfileDataInterface';
 import { ProfileItem } from '../Data/Data';
-import useLocalStorage from '../../Hooks/useLocalStorage';
 
-
+const LOCAL_STORAGE_KEY_PROFILES = "profiles";
 const LOCAL_STORAGE_KEY_SELECTED_PROFILE = "selected_profile";
 
 const FormAutoFill = () => {
   const [isSearching, setIsSearching] = useState(false);
   const [profileData, setProfileData] = useState<ProfileItem[]>([]);
-  const selectedProfile = useLocalStorage(LOCAL_STORAGE_KEY_SELECTED_PROFILE);
+  const [profileList, setProfileList] = useState(() => {
+    const storedProfiles = localStorage.getItem(LOCAL_STORAGE_KEY_PROFILES);
+      return storedProfiles
+          ? JSON.parse(storedProfiles)
+          : [{ content: uuidv4(), label: "Sample" }];
+    });
+  
+  const [selectedProfile, setSelectedProfile] = useState(() =>{
+      const storedSelectedProfile = localStorage.getItem(LOCAL_STORAGE_KEY_SELECTED_PROFILE);
+      return storedSelectedProfile ? JSON.parse(storedSelectedProfile) : profileList[0]
+  });
+
 
   useEffect(() => {
-    const parsedProfile = selectedProfile ? JSON.parse(selectedProfile) : null;
-
+    const parsedProfile = selectedProfile;
     if (parsedProfile && typeof parsedProfile.content === "string") {
       const storedData = localStorage.getItem(parsedProfile.content);
       if (storedData) {
